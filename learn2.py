@@ -89,14 +89,14 @@ def combine_team_data(home,away,home_hist,away_hist):
 	    else:	
 		game.append(home[hkeys[i+1]]/away[akeys[i+1]])
 	else:
-	    if away[akeys[i]] == 0:
+	    if away[akeys[i+1]] == 0:
 		game.append(home[hkeys[i]]*100)
 	    else:
 		game.append(home[hkeys[i]]/away[akeys[i+1]])
-	    if game[-1] == 0:
+	    if away[akeys[i]] == 0:
 		game.append(home[hkeys[i+1]]*100)
 	    else:
-		game.append(1/game[-1])
+		game.append(home[hkeys[i+1]]/away[akeys[i]])
     home_games_adv = 0
     away_games_adv = 0
     for team,home_record in home_hist.iteritems():
@@ -276,7 +276,7 @@ if __name__ == '__main__':
 	w = SGD(games,results,'linear',.5,0.0001)
 	ensemble.append(w)
 	y = predict_gd(w,games_test,len(games_test))
-#	print accuracy(y,results_test)
+	print accuracy(y,results_test)
     yh = []
     for g in games_test:
 	res = []
@@ -289,8 +289,8 @@ if __name__ == '__main__':
 	    res.append(y)
 	win = np.sign(sum(res)/float(len(res)))
 	yh.append(win)
-   # print 'test'
-   # print accuracy(yh,results_test)
+    print 'test'
+    print accuracy(yh,results_test)
 
     hometeam = raw_input('home team(Abbreviation): ')
     awayteam = raw_input('away team: ')
@@ -310,6 +310,6 @@ if __name__ == '__main__':
 	else:
 	    y = 1
 	res.append(y)
-  #  print res
+    print res
     win = (sum(res)/float(len(res)))
     print np.sign(win)
